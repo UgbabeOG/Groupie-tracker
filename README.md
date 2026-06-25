@@ -16,7 +16,7 @@ Built with an offline-first architectural mindset, this system guarantees high a
 ### Architectural Diagram
 
 ```
-+-----------------------------------+
+                                +-----------------------------------+
                                 |     Groupie Tracker Go App        |
                                 +-----------------------------------+
                                                   |
