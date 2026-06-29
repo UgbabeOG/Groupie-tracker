@@ -126,6 +126,7 @@ groupie-tracker/
 ├── Dockerfile
 ├── go.mod
 ├── main.go                       # Web server entry point, router initialization
+├── handlers.go               # HTTP routing handlers (Home, Detail, Static)
 ├── data/                         # Local JSON file cache persistence layer
 │   ├── artists.json
 │   ├── dates.json
@@ -142,7 +143,6 @@ groupie-tracker/
 │   └── error.html                # Generic fail-safe message renderer (404/500)
 └── utils/                        # Encapsulated application modules
     ├── cache.go                  # Global state management, loops, and Mutex swaps
-    ├── handlers.go               # HTTP routing handlers (Home, Detail, Static)
     ├── models.go                 # Struct definitions with matched structural JSON tags
     └── template.go               # Crash-proof buffer rendering implementation
 
