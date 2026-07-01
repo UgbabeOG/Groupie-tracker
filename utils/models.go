@@ -29,3 +29,27 @@ type FullArtistData struct {
 	Dates     []string
 	Relations map[string][]string
 }
+
+type FullArtistDetail struct {
+	Artist
+	Locations      []string
+	Dates          []string
+	DatesLocations map[string][]string
+}
+
+type LocationsWrapper struct {
+	Index []LocationData `json:"index"`
+}
+
+type DatesWrapper struct {
+	Index []DateData `json:"index"`
+}
+
+type RelationsWrapper struct {
+	Index []RelationData `json:"index"`
+}
+
+type ErrorData struct {
+	Code    int
+	Message string
+}

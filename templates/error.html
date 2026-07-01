@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An error occurred — Groupie Tracker">
+    <title>Error {{.Code}} — Groupie Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="logo" id="site-logo">
+                <span class="logo-icon">🎵</span>
+                <span class="logo-text">Groupie Tracker</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container error-page">
+        <div class="error-card" id="error-card">
+            <div class="error-code" id="error-code">{{.Code}}</div>
+            <h1 class="error-message" id="error-message">{{.Message}}</h1>
+            <p class="error-hint">Something went wrong. Please try again or head back to the homepage.</p>
+            <a href="/" class="btn-primary" id="error-home-link">← Back to Home</a>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Groupie Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

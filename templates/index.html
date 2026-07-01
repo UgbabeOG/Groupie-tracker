@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Groupie Tracker — Explore bands, artists, concert locations, and tour dates from around the world.">
+    <title>Groupie Tracker — All Artists</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="logo" id="site-logo">
+                <span class="logo-icon">🎵</span>
+                <span class="logo-text">Groupie Tracker</span>
+            </a>
+            <p class="tagline">Explore artists, bands &amp; concert tours worldwide</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="artist-grid" id="artist-grid">
+            {{range .}}
+            <a href="/artist?id={{.ID}}" class="artist-card" id="artist-card-{{.ID}}">
+                <div class="card-image-wrapper">
+                    <img src="{{.Image}}" alt="{{.Name}}" class="card-image" loading="lazy">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">{{.Name}}</h2>
+                    <div class="card-meta">
+                        <span class="meta-badge">Est. {{.CreationDate}}</span>
+                        <span class="meta-badge">{{len .Members}} member{{if gt (len .Members) 1}}s{{end}}</span>
+                    </div>
+                </div>
+            </a>
+            {{end}}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Groupie Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
