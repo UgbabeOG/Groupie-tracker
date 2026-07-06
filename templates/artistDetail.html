@@ -4,80 +4,226 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{.Artist.Name}} — View concert dates, tour locations, band members and more on Groupie Tracker.">
+
     <title>{{.Artist.Name}} — Groupie Tracker</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
+
 <body>
-    <header class="site-header">
-        <div class="container">
-            <a href="/" class="logo" id="site-logo">
-                <span class="logo-icon">🎵</span>
-                <span class="logo-text">Groupie Tracker</span>
-            </a>
-            <nav class="breadcrumb">
-                <a href="/">All Artists</a>
-                <span class="separator">›</span>
-                <span>{{.Artist.Name}}</span>
-            </nav>
+
+<header class="site-header">
+
+    <div class="container">
+
+        <a href="/" class="logo">
+            <span class="logo-icon">🎵</span>
+            <span class="logo-text">Groupie Tracker</span>
+        </a>
+
+        <nav class="breadcrumb">
+            <a href="/">All Artists</a>
+            <span class="separator">›</span>
+            <span>{{.Artist.Name}}</span>
+        </nav>
+
+    </div>
+
+</header>
+
+<main class="container detail-page">
+
+    <!-- ========================================= -->
+    <!-- Artist Hero -->
+    <!-- ========================================= -->
+
+    <section class="detail-hero">
+
+        <div class="hero-image-wrapper">
+
+            <img
+                src="{{.Artist.Image}}"
+                alt="{{.Artist.Name}}"
+                class="hero-image">
+
         </div>
-    </header>
 
-    <main class="container detail-page">
-        <!-- Hero Section -->
-        <section class="detail-hero" id="detail-hero">
-            <div class="hero-image-wrapper">
-                <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="hero-image" id="hero-image">
-            </div>
-            <div class="hero-info">
-                <h1 class="hero-name" id="artist-name">{{.Artist.Name}}</h1>
-                <div class="hero-badges">
-                    <span class="badge badge-primary" id="creation-date">Founded {{.Artist.CreationDate}}</span>
-                    <span class="badge badge-accent" id="first-album">First Album: {{.Artist.FirstAlbum}}</span>
-                </div>
-            </div>
-        </section>
+        <div class="hero-info">
 
-        <!-- Members -->
-        <section class="detail-section" id="members-section">
-            <h2 class="section-title">Members</h2>
-            <div class="members-list">
-                {{range .Artist.Members}}
-                <span class="member-chip">{{.}}</span>
-                {{end}}
-            </div>
-        </section>
+            <h1 class="hero-name">
+                {{.Artist.Name}}
+            </h1>
 
-        <!-- Relations: Locations → Dates -->
-        {{if .DatesLocations}}
-        <section class="detail-section" id="relations-section">
-            <h2 class="section-title">Concert Tour</h2>
-            <div class="relations-grid">
-                {{range $location, $dates := .DatesLocations}}
-                <div class="relation-card">
-                    <h3 class="relation-location">📍 {{$location}}</h3>
-                    <ul class="relation-dates">
-                        {{range $dates}}
-                        <li>{{.}}</li>
-                        {{end}}
-                    </ul>
-                </div>
-                {{end}}
-            </div>
-        </section>
-        {{end}}
+            <div class="hero-badges">
 
-        <div class="back-link-wrapper">
-            <a href="/" class="back-link" id="back-link">← Back to All Artists</a>
+                <span class="badge badge-primary">
+                    📅 Founded {{.Artist.CreationDate}}
+                </span>
+
+                <span class="badge badge-accent">
+                    💿 {{.Artist.FirstAlbum}}
+                </span>
+
+            </div>
+
         </div>
-    </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2025 Groupie Tracker. All rights reserved.</p>
+    </section>
+
+    <!-- ========================================= -->
+    <!-- Members -->
+    <!-- ========================================= -->
+
+    <section class="detail-section">
+
+        <h2 class="section-title">
+            Band Members
+        </h2>
+
+        <div class="members-list">
+
+            {{range .Artist.Members}}
+
+            <span class="member-chip">
+                👤 {{.}}
+            </span>
+
+            {{end}}
+
         </div>
-    </footer>
+
+    </section>
+
+    <!-- ========================================= -->
+    <!-- Tour Locations -->
+    <!-- ========================================= -->
+
+    <!-- {{if .Locations}}
+
+    <section class="detail-section">
+
+        <h2 class="section-title">
+            Tour Locations
+        </h2>
+
+        <div class="members-list">
+
+            {{range .Locations}}
+
+            <span class="member-chip">
+                📍 {{.}}
+            </span>
+
+            {{end}}
+
+        </div>
+
+    </section>
+
+    {{end}} -->
+
+    <!-- ========================================= -->
+    <!-- Concert Dates -->
+    <!-- ========================================= -->
+
+    <!-- {{if .Dates}}
+
+    <section class="detail-section">
+
+        <h2 class="section-title">
+            Concert Dates
+        </h2>
+
+        <div class="members-list">
+
+            {{range .Dates}}
+
+            <span class="member-chip">
+                📅 {{.}}
+            </span>
+
+            {{end}}
+
+        </div>
+
+    </section>
+
+    {{end}} -->
+
+    <!-- ========================================= -->
+    <!-- Locations and Dates -->
+    <!-- ========================================= -->
+
+    {{if .DatesLocations}}
+
+    <section class="detail-section">
+
+        <h2 class="section-title">
+            Tour Schedule
+        </h2>
+
+        <div class="relations-grid">
+
+            {{range $location, $dates := .DatesLocations}}
+
+            <div class="relation-card">
+
+                <h3 class="relation-location">
+                    📍 {{$location}}
+                </h3>
+
+                <ul class="relation-dates">
+
+                    {{range $dates}}
+
+                    <li>{{.}}</li>
+
+                    {{end}}
+
+                </ul>
+
+            </div>
+
+            {{end}}
+
+        </div>
+
+    </section>
+
+    {{end}}
+
+    <!-- ========================================= -->
+    <!-- Back Button -->
+    <!-- ========================================= -->
+
+    <div class="back-link-wrapper">
+
+        <a href="/" class="back-link">
+
+            ← Back to Artists
+
+        </a>
+
+    </div>
+
+</main>
+
+<footer class="site-footer">
+
+    <div class="container">
+
+        <p>
+            &copy; 2025 Groupie Tracker. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
 </body>
 </html>

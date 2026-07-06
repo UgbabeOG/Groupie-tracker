@@ -9,26 +9,46 @@ import (
 )
 
 func main() {
-	// Bootstrap: load all API entities into memory from disk or live API.
+
+	// ------------------------------------
+	// Initialize application cache
+	// ------------------------------------
+
+	// Load data from local JSON cache or live API.
 	utils.InitCache()
 
-	// Launch a background goroutine that periodically refreshes the cache.
+	// Start background synchronization worker.
 	utils.StartSyncWorker(24 * time.Hour)
+
+	// ------------------------------------
+	// Router configuration
+	// ------------------------------------
 
 	mux := http.NewServeMux()
 
-	// Mount the static file server for CSS, JS, and other client assets.
+	// Serve static assets.
 	fileServer := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
-	// Bind route handlers.
-	mux.HandleFunc("/{$}", HomeHandler)
+	// Application routes.
+	mux.HandleFunc("/", HomeHandler)
 	mux.HandleFunc("/artist", ArtistDetailHandler)
 
-	port := ":8080"
-	log.Printf("Server is running on http://localhost%s", port)
+	// ------------------------------------
+	// HTTP server configuration
+	// ------------------------------------
 
-	if err := http.ListenAndServe(port, mux); err != nil {
+	server := &http.Server{
+		Addr:         ":8080",
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
+	log.Println("Server running at http://localhost:8080")
+
+	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }

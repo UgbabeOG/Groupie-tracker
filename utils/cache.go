@@ -48,18 +48,31 @@ func getResourcesConfig() []apiResource {
 // InitCache initializes the local cache by ensuring the data directory exists, downloading any missing files, and loading all data into memory.
 func InitCache() error {
 	if err := os.MkdirAll("data", 0755); err != nil {
-		return fmt.Errorf("Failed to create data folder: %w", err)
+		return fmt.Errorf("failed to create data folder: %w", err)
 	}
 
 	for _, resource := range getResourcesConfig() {
 		if _, err := os.Stat(filepath.Join("data", resource.filename)); os.IsNotExist(err) {
 			log.Printf("Missing storage track: %s. Performing initial catch up...\n", resource.filename)
+
 			if err := downloadToFile(resource.url, resource.filename); err != nil {
 				return err
 			}
 		}
 	}
-	return loadAllFromDiskToMemory()
+
+	// Load all cached data into memory.
+	if err := loadAllFromDiskToMemory(); err != nil {
+		return err
+	}
+
+	// Print cache sizes.
+	log.Printf("Artists: %d", len(ArtistsCache))
+	log.Printf("Locations: %d", len(LocationsCache))
+	log.Printf("Dates: %d", len(DatesCache))
+	log.Printf("Relations: %d", len(RelationsCache))
+
+	return nil
 }
 
 // loadAllFromDiskToMemory loads the JSON data from local files into memory for all configured API resources.
