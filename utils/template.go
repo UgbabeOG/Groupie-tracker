@@ -12,7 +12,20 @@ import (
 var templates *template.Template
 
 func init() {
-	templates = template.Must(template.ParseGlob(filepath.Join("templates", "*.html")))
+    var err error
+    patterns := []string{
+        filepath.Join("templates", "*.html"),
+        filepath.Join("..", "templates", "*.html"),
+    }
+
+    for _, pattern := range patterns {
+        templates, err = template.ParseGlob(pattern)
+        if err == nil {
+            return
+        }
+    }
+
+    log.Fatalf("Failed to parse templates from %v: %v", patterns, err)
 }
 
 // RenderTemplate executes the named template into an internal bytes.Buffer
