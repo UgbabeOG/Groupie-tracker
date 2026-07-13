@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -97,4 +98,71 @@ func TestInitCacheCompletePipeline(t *testing.T) {
 			}
 		}
 	}
+}
+func TestJSONDecodingValidations(t *testing.T) {
+    cases := []struct {
+        name  string
+        input string
+    }{
+        {
+            name: "valid artists",
+            input: `[{"id":1,"name":"Artist","image":"img.jpg","members":["A"],"creationDate":1980,"firstAlbum":"Debut"}]`,
+        },
+        {
+            name: "valid locations wrapper",
+            input: `{"index":[{"id":1,"locations":["london"]}]}`,
+        },
+        {
+            name: "valid dates wrapper",
+            input: `{"index":[{"id":1,"dates":["2025-01-01"]}]}`,
+        },
+        {
+            name: "valid relations wrapper",
+            input: `{"index":[{"id":1,"datesLocations":{"2025-01-01":["london"]}}]}`,
+        },
+    }
+
+    for _, tc := range cases {
+        tc := tc
+        t.Run(tc.name, func(t *testing.T) {
+            t.Parallel()
+
+            switch tc.name {
+            case "valid artists":
+                var artists []Artist
+                if err := json.Unmarshal([]byte(tc.input), &artists); err != nil {
+                    t.Fatalf("failed to parse artists JSON: %v", err)
+                }
+                if len(artists) != 1 || artists[0].Name != "Artist" {
+                    t.Fatalf("unexpected artists result: %#v", artists)
+                }
+            case "valid locations wrapper":
+                var wrapper LocationsWrapper
+                if err := json.Unmarshal([]byte(tc.input), &wrapper); err != nil {
+                    t.Fatalf("failed to parse locations wrapper JSON: %v", err)
+                }
+                if len(wrapper.Index) != 1 || wrapper.Index[0].Locations[0] != "london" {
+                    t.Fatalf("unexpected locations wrapper result: %#v", wrapper)
+                }
+            case "valid dates wrapper":
+                var wrapper DatesWrapper
+                if err := json.Unmarshal([]byte(tc.input), &wrapper); err != nil {
+                    t.Fatalf("failed to parse dates wrapper JSON: %v", err)
+                }
+                if len(wrapper.Index) != 1 || wrapper.Index[0].Dates[0] != "2025-01-01" {
+                    t.Fatalf("unexpected dates wrapper result: %#v", wrapper)
+                }
+            case "valid relations wrapper":
+                var wrapper RelationsWrapper
+                if err := json.Unmarshal([]byte(tc.input), &wrapper); err != nil {
+                    t.Fatalf("failed to parse relations wrapper JSON: %v", err)
+                }
+                if len(wrapper.Index) != 1 || wrapper.Index[0].DatesLocations["2025-01-01"][0] != "london" {
+                    t.Fatalf("unexpected relations wrapper result: %#v", wrapper)
+                }
+            default:
+                t.Fatalf("unknown test case %q", tc.name)
+            }
+        })
+    }
 }

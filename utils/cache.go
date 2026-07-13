@@ -1,3 +1,5 @@
+// Package utils provides cache management, JSON data loading, template
+// rendering, and synchronization helpers for the Groupie Tracker application.
 package utils
 
 import (
@@ -83,11 +85,11 @@ func loadAllFromDiskToMemory() error {
 	for _, resource := range getResourcesConfig() {
 		data, err := os.ReadFile(filepath.Join("data", resource.filename))
 		if err != nil {
-			return fmt.Errorf("Failed reading cache target %s: %w", resource.filename, err)
+			return fmt.Errorf("failed reading cache target %s: %w", resource.filename, err)
 		}
 
 		if err := json.Unmarshal(data, resource.target); err != nil {
-			return fmt.Errorf("Failed unmarshaling %s: %w", resource.filename, err)
+			return fmt.Errorf("failed unmarshaling %s: %w", resource.filename, err)
 		}
 	}
 	return nil
@@ -97,7 +99,7 @@ func loadAllFromDiskToMemory() error {
 func downloadToFile(url, filename string) error {
 	response, err := http.Get(url)
 	if err != nil {
-		return fmt.Errorf("Network exception on %s: %w", filename, err)
+		return fmt.Errorf("network exception on %s: %w", filename, err)
 	}
 	defer response.Body.Close()
 
@@ -113,34 +115,34 @@ func downloadToFile(url, filename string) error {
 		var raw json.RawMessage
 
 		if err := json.NewDecoder(response.Body).Decode(&raw); err != nil {
-			return fmt.Errorf("Parsing payload error on %s: %w", filename, err)
+			return fmt.Errorf("parsing payload error on %s: %w", filename, err)
 		}
 
 		processedJSON, err = json.MarshalIndent(raw, "", "  ")
 		if err != nil {
-			return fmt.Errorf("Failed to marshal artists data: %w", err)
+			return fmt.Errorf("failed to marshal artists data: %w", err)
 		}
 	} else {
 		var wrapper struct {
 			Index json.RawMessage `json:"index"`
 		}
 		if err := json.NewDecoder(response.Body).Decode(&wrapper); err != nil {
-			return fmt.Errorf("Parsing wrapper error on %s: %w", filename, err)
+			return fmt.Errorf("parsing wrapper error on %s: %w", filename, err)
 		}
 
 		processedJSON, err = json.MarshalIndent(wrapper.Index, "", "  ")
 		if err != nil {
-			return fmt.Errorf("Failed to marshal %s data: %w", filename, err)
+			return fmt.Errorf("failed to marshal %s data: %w", filename, err)
 		}
 	}
 
 	if err := os.WriteFile(tmpPath, processedJSON, 0644); err != nil {
-		return fmt.Errorf("Failed temporary track save: %w", err)
+		return fmt.Errorf("failed temporary track save: %w", err)
 	}
 
 	if err := os.Rename(tmpPath, finalPath); err != nil {
 		os.ReadDir(tmpPath)
-		return fmt.Errorf("Failed atomic engine rename swap: %w", err)
+		return fmt.Errorf("failed atomic engine rename swap: %w", err)
 	}
 	return nil
 }

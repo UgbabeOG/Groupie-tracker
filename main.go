@@ -1,3 +1,7 @@
+// Package main implements the Groupie Tracker web application server.
+// It initializes the in-memory cache, starts a background synchronization
+// process, and exposes HTTP endpoints for listing artists and showing
+// artist details.
 package main
 
 import (
